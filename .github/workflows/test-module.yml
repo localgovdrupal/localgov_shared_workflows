@@ -162,7 +162,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      - name: Run deprecated code checks
+      - name: Run static analysis checks
         run: |
           cd html
           ./bin/phpstan analyse -c ./phpstan.neon ${{inputs.project_path}}
