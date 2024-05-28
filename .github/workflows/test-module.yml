@@ -11,6 +11,11 @@ on:
         description: 'LocalGov Drupal module path'
         required: true
         type: string
+      use_module_phpstan_config:
+        description: 'Use phpstan.neon from the module under test, instead of the drupal root.'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -137,6 +142,8 @@ jobs:
     name: Static analysis checks
     needs: build
     runs-on: ubuntu-latest
+    env:
+      PHPSTAN_NEON_PATH: "./phpstan.neon"
 
     strategy:
       fail-fast: false
@@ -162,10 +169,14 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
+      - name: Override phpstan.neon path if requested
+        if: ${{inputs.use_module_phpstan_config}}
+        run: echo "PHPSTAN_NEON_PATH=\"${{inputs.project_path}}/phpstan.neon\"" >> $GITHUB_ENV
+
       - name: Run static analysis checks
         run: |
           cd html
-          ./bin/phpstan analyse -c ./phpstan.neon ${{inputs.project_path}}
+          ./bin/phpstan analyse -c ${{ env.PHPSTAN_NEON_PATH }} ${{inputs.project_path}}
   
   phpunit:
     name: PHPUnit tests
