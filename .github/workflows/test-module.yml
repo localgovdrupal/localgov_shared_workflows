@@ -104,6 +104,10 @@ jobs:
       - name: Obtain suggested dependencies
         run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
+      - name: Obtain dev dependencies
+        if: hashFiles('./html/${{inputs.project_path}}/composer.json') != ''
+        run: jq --raw-output '.["require-dev"] | values | to_entries[] | @sh "\(.key):\(.value)"' ./html/${{inputs.project_path}}/composer.json | xargs composer --working-dir=./html require
+
   phpcs:
     name: Coding standards checks
     needs: build
