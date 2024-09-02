@@ -280,7 +280,7 @@ jobs:
   
   phpunit:
     name: PHPUnit tests
-    needs: build
+    needs: [build,eslint_js,eslint_yaml,stylelint,phpcs,phpstan]
     runs-on: ubuntu-latest
 
     strategy:
