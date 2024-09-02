@@ -214,7 +214,7 @@ jobs:
         if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
-          node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json ../../${{inputs.project_path}}/**/*.css
+          node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json "../../${{inputs.project_path}}/**/*.css"
 
   phpcs:
     name: PHP coding standards checks
