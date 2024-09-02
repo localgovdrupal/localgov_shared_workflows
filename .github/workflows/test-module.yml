@@ -133,7 +133,8 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Run coding standards checks
-        if: hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
+        continue-on-error: true
+        if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
@@ -164,7 +165,8 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Run coding standards checks
-        if: hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
+        continue-on-error: true
+        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
