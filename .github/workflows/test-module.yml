@@ -132,12 +132,16 @@ jobs:
           restore-keys: |
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
+      - name: Install packages
+        run: |
+          cd html/web/core
+          npm i
+
       - name: Run coding standards checks
         #continue-on-error: true
         if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
-          npm i
           node ./node_modules/eslint/bin/eslint.js --ext .js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   eslint_yaml:
@@ -164,12 +168,16 @@ jobs:
           restore-keys: |
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
+      - name: Install packages
+        run: |
+          cd html/web/core
+          npm i
+
       - name: Run coding standards checks
         #continue-on-error: true
         if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
-          npm i
           node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   stylelint:
@@ -196,12 +204,16 @@ jobs:
           restore-keys: |
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
+      - name: Install packages
+        run: |
+          cd html/web/core
+          npm i
+
       - name: Run coding standards checks
         #continue-on-error: true
         if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
-          npm i
           node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json ../../${{inputs.project_path}}/**/*.css
 
   phpcs:
