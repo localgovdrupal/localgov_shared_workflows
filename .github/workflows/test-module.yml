@@ -137,7 +137,7 @@ jobs:
         run: |
           cd html/web/core
           npm i
-          node ./node_modules/eslint/bin/eslint.js ./html/${{inputs.project_path}}
+          node ./node_modules/eslint/bin/eslint.js ../../${{inputs.project_path}}
 
   phpcs:
     name: Coding standards checks
