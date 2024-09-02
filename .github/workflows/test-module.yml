@@ -108,7 +108,7 @@ jobs:
         if: hashFiles('./html/${{inputs.project_path}}/composer.json') != ''
         run: jq --raw-output '.["require-dev"] | values | to_entries[] | @sh "\(.key):\(.value)"' ./html/${{inputs.project_path}}/composer.json | xargs composer --working-dir=./html require
 
-  eslint:
+  eslint_js:
     name: ESLint javascript checks
     needs: build
     runs-on: ubuntu-latest
@@ -133,11 +133,42 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Run coding standards checks
-        #if: hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
+        if: hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
-          node ./node_modules/eslint/bin/eslint.js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
+          node ./node_modules/eslint/bin/eslint.js --ext .js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
+
+  eslint_yaml:
+    name: ESLint yaml checks
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        localgov-version:
+          - '3.x'
+        drupal-version:
+          - '~10.0'
+        php-version:
+          - '8.3'
+
+    steps:
+      - name: Cached workspace
+        uses: actions/cache@v4
+        with:
+          path: ./html
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          restore-keys: |
+            localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
+
+      - name: Run coding standards checks
+        if: hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          npm i
+          node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   phpcs:
     name: Coding standards checks
