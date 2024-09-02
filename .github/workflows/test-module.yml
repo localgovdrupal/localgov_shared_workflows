@@ -109,7 +109,7 @@ jobs:
         run: jq --raw-output '.["require-dev"] | values | to_entries[] | @sh "\(.key):\(.value)"' ./html/${{inputs.project_path}}/composer.json | xargs composer --working-dir=./html require
 
   eslint:
-    name: ESLint JS checks
+    name: ESLint javascript checks
     needs: build
     runs-on: ubuntu-latest
 
@@ -137,7 +137,7 @@ jobs:
         run: |
           cd html/web/core
           npm i
-          node ./node_modules/eslint/bin/eslint.js ../../${{inputs.project_path}}
+          node ./node_modules/eslint/bin/eslint.js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   phpcs:
     name: Coding standards checks
