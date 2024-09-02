@@ -177,8 +177,6 @@ jobs:
         #continue-on-error: true
         if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
-          echo ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) }}
-          echo ${{ format('./html/{0}/**/*.yml', inputs.project_path) }}
           cd html/web/core
           node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
