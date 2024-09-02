@@ -124,13 +124,20 @@ jobs:
           - '8.3'
 
     steps:
+      - name: Cached workspace
+        uses: actions/cache@v4
+        with:
+          path: ./html
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          restore-keys: |
+            localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
+
       - name: Run coding standards checks
-        #if: hashFiles(format('{0}/**/*.js', inputs.project_path)) != '' }}
+        #if: hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
-          ls
           cd html/web/core
           npm i
-          node ./node_modules/eslint/bin/eslint.js ${{inputs.project_path}}
+          node ./node_modules/eslint/bin/eslint.js ./html/${{inputs.project_path}}
 
   phpcs:
     name: Coding standards checks
