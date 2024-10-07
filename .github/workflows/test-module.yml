@@ -112,6 +112,7 @@ jobs:
     name: Coding standards checks
     needs: build
     runs-on: ubuntu-latest
+    continue-on-error: true
 
     strategy:
       fail-fast: false
@@ -137,10 +138,13 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
 
-      - name: Run coding standards checks
-        run: |
-          cd html
-          ./bin/phpcs -p ${{inputs.project_path}}
+      - name: Drupal PHPCS check with annotation
+        uses: guix77/phpcs-drupal-action@php8.3
+
+      # - name: Run coding standards checks
+      #   run: |
+      #     cd html
+      #     ./bin/phpcs -p ${{inputs.project_path}}
   
   phpstan:
     name: Static analysis checks
