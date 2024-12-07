@@ -286,7 +286,7 @@ jobs:
         run: echo "PHPSTAN_NEON_PATH=\"${{inputs.project_path}}/phpstan.neon\"" >> $GITHUB_ENV
 
       - name: Run static analysis checks
-        if: ${{ hashFiles(format('./html/{0}/**/*.inc', inputs.project_path), format('./html/{0}/**/*.install', inputs.project_path), format('./html/{0}/**/*.info', inputs.project_path), format('./html/{0}/**/*.test', inputs.project_path), format('./html/{0}/**/*.module', inputs.project_path), format('./html/{0}/**/*.php', inputs.project_path), format('./html/{0}/**/*.profile', inputs.project_path), format('./html/{0}/**/*.test', inputs.project_path), format('./html/{0}/**/*.theme', inputs.project_path)) != '' }}
+        if: ${{ hashFiles(format('./html/{0}/**/*.inc', inputs.project_path), format('./html/{0}/**/*.install', inputs.project_path), format('./html/{0}/**/*.module', inputs.project_path), format('./html/{0}/**/*.php', inputs.project_path), format('./html/{0}/**/*.profile', inputs.project_path), format('./html/{0}/**/*.test', inputs.project_path), format('./html/{0}/**/*.theme', inputs.project_path)) != '' }}
         run: |
           cd html
           ./bin/phpstan analyse -c ${{ env.PHPSTAN_NEON_PATH }} ${{inputs.project_path}}
@@ -331,4 +331,4 @@ jobs:
           mkdir -p ./html/web/sites/simpletest && chmod 777 ./html/web/sites/simpletest
           sed -i "s#http://localgov.lndo.site#http://drupal#" ./html/phpunit.xml.dist
           docker exec -t drupal bash -c 'chown docker:docker -R /var/www/html'
-          docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/paratest --processes=4 /var/www/html/${{inputs.project_path}}"
+          docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit /var/www/html/${{inputs.project_path}}"
