@@ -108,8 +108,116 @@ jobs:
         if: hashFiles('./html/${{inputs.project_path}}/composer.json') != ''
         run: jq --raw-output '.["require-dev"] | values | to_entries[] | @sh "\(.key):\(.value)"' ./html/${{inputs.project_path}}/composer.json | xargs composer --working-dir=./html require
 
+  eslint_js:
+    name: ESLint javascript checks
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        localgov-version:
+          - '3.x'
+        drupal-version:
+          - '~10.0'
+        php-version:
+          - '8.3'
+
+    steps:
+      - name: Cached workspace
+        uses: actions/cache@v4
+        with:
+          path: ./html
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          restore-keys: |
+            localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
+
+      - name: Install packages
+        if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          npm i
+
+      - name: Run coding standards checks
+        if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          node ./node_modules/eslint/bin/eslint.js --ext .js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
+
+  eslint_yaml:
+    name: ESLint yaml checks
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        localgov-version:
+          - '3.x'
+        drupal-version:
+          - '~10.0'
+        php-version:
+          - '8.3'
+
+    steps:
+      - name: Cached workspace
+        uses: actions/cache@v4
+        with:
+          path: ./html
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          restore-keys: |
+            localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
+
+      - name: Install packages
+        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          npm i
+
+      - name: Run coding standards checks
+        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
+
+  stylelint:
+    name: Stylelint checks
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        localgov-version:
+          - '3.x'
+        drupal-version:
+          - '~10.0'
+        php-version:
+          - '8.3'
+
+    steps:
+      - name: Cached workspace
+        uses: actions/cache@v4
+        with:
+          path: ./html
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          restore-keys: |
+            localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
+
+      - name: Install packages
+        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          npm i
+
+      - name: Run coding standards checks
+        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
+        run: |
+          cd html/web/core
+          node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json "../../${{inputs.project_path}}/**/*.css"
+
   phpcs:
-    name: Coding standards checks
+    name: PHP coding standards checks
     needs: build
     runs-on: ubuntu-latest
 
@@ -143,7 +251,7 @@ jobs:
           ./bin/phpcs -p ${{inputs.project_path}}
   
   phpstan:
-    name: Static analysis checks
+    name: PHP static analysis checks
     needs: build
     runs-on: ubuntu-latest
     env:
@@ -185,7 +293,7 @@ jobs:
   
   phpunit:
     name: PHPUnit tests
-    needs: build
+    needs: [build,phpcs,phpstan]
     runs-on: ubuntu-latest
 
     strategy:
