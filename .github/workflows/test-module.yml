@@ -94,10 +94,19 @@ jobs:
           repository: localgovdrupal/drupal-container
           ref: php${{ matrix.php-version }}
 
-      - name: Create LocalGov Drupal project
+      - name: Create LocalGov Drupal 10 project
+        if: matrix.drupal-version == '~10.0'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
           composer --working-dir=./html require --no-install localgovdrupal/localgov:${{ matrix.localgov-version }}-dev
+          composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
+          composer --working-dir=./html install
+
+      - name: Create LocalGov Drupal 11 project
+        if: matrix.drupal-version == '~11.0'
+        run: |
+          composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
+          composer --working-dir=./html require --no-install localgovdrupal/localgov:dev-feature/3.x/d11-support
           composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer --working-dir=./html install
 
