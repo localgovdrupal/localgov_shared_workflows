@@ -99,7 +99,6 @@ jobs:
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
           composer --working-dir=./html require --no-install localgovdrupal/localgov:${{ matrix.localgov-version }}-dev
           composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
-          composer --working-dir=./html install
 
       - name: Obtain the test target using Composer
         if: env.HEAD_USER == 'localgovdrupal'
@@ -113,6 +112,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: ${{inputs.project_path}}
+
+      - name: Run composer install
+        run: |
+          composer --working-dir=./html install
 
       - name: Obtain suggested dependencies
         run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
