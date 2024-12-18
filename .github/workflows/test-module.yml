@@ -97,7 +97,7 @@ jobs:
       - name: Create LocalGov Drupal 10 project
         if: matrix.drupal-version == '~10.0'
         run: |
-          composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
+          composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
           composer --working-dir=./html require --no-install localgovdrupal/localgov:${{ matrix.localgov-version }}-dev
           composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer --working-dir=./html install
