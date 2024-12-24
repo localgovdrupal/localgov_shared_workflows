@@ -106,15 +106,15 @@ jobs:
         if: matrix.drupal-version == '~11.0'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
-          composer --working-dir=./html require --no-install localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13"
+          composer --working-dir=./html require --no-install localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13
           composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer --working-dir=./html install
 
       - name: Install LGD dependencies needed to get D11 support to install
         run: |
-          composer --working-dir=./html require --no-install localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13"
-          composer --working-dir=./html require --with-all-dependencies localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11"
-          composer --working-dir=./html require --with-all-dependencies localgovdrupal/localgov_geo:"dev-feature/drupal-11-support as 2.0.9"
+          composer --working-dir=./html require --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13"
+          composer --working-dir=./html require --no-install --with-all-dependencies localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11"
+          composer --working-dir=./html require --no-install --with-all-dependencies localgovdrupal/localgov_geo:"dev-feature/drupal-11-support as 2.0.9"
           composer --working-dir=./html install
           
       - name: Obtain the test target using Composer
