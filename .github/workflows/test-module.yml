@@ -28,23 +28,23 @@ jobs:
         include:
           - localgov-version: '3.x'
             localgov-project-version: '3.x'
-            drupal-version: '^10.0'
+            drupal-version: '10.*'
             php-version: '8.1'
           - localgov-version: '3.x'
             localgov-project-version: '3.x'
-            drupal-version: '^10.0'
+            drupal-version: '10.*'
             php-version: '8.2'
           - localgov-version: '3.x'
             localgov-project-version: '3.x'
-            drupal-version: '^10.0'
+            drupal-version: '10.*'
             php-version: '8.3'
           # - localgov-version: '3.x'
           #   localgov-project-version: '4.x'
-          #   drupal-version: '^11.0'
+          #   drupal-version: '11.*'
           #   php-version: '8.3'
           # - localgov-version: '3.x'
           #   localgov-project-version: '4.x'
-          #   drupal-version: '^11.0'
+          #   drupal-version: '11.*'
           #   php-version: '8.4'
 
     steps:
@@ -95,7 +95,7 @@ jobs:
           ref: php${{ matrix.php-version }}
 
       - name: Create LocalGov Drupal 10 project
-        if: matrix.drupal-version == '^10.0'
+        if: matrix.drupal-version == '10.*'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
           composer --working-dir=./html require --no-install localgovdrupal/localgov:${{ matrix.localgov-version }}-dev
@@ -103,7 +103,7 @@ jobs:
           composer --working-dir=./html install
 
       - name: Create LocalGov Drupal 11 project
-        if: matrix.drupal-version == '^11.0'
+        if: matrix.drupal-version == '11.*'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-project-version }}"
           composer --working-dir=./html require --no-install localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13
