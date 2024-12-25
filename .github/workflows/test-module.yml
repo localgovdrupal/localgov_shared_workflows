@@ -121,8 +121,9 @@ jobs:
         with:
           path: ${{inputs.project_path}}
 
-      - name: Obtain suggested dependencies
-        run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
+      # commented out as this breaks D11 installs as because suggest doesn't have a version it fails
+      # - name: Obtain suggested dependencies
+      #   run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
       - name: Obtain dev dependencies
         if: hashFiles('./html/${{inputs.project_path}}/composer.json') != ''
