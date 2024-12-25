@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ./html
-          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}-test5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -97,8 +97,7 @@ jobs:
         if: matrix.drupal-version == '~10.0'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
-          composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13" localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11" localgovdrupal/localgov_geo:"dev-feature/drupal-11-support as 2.0.9" localgovdrupal/localgov_news:"dev-feature/drupal-11-support as 2.3.10" localgovdrupal/localgov_page_components:"dev-feature/1.x/drupal-11-support as 1.1.7" localgovdrupal/localgov_paragraphs:"dev-feature/2.x/drupal-11-support as 2.4.11" localgovdrupal/localgov_subsites:"dev-feature/2.x/drupal-11-support as 2.3.7"
-          composer require --working-dir=./html --no-install --with-all-dependencies brianium/paratest:^6.0 drupal/core:${{ matrix.drupal-version }} drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
+          composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13" localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11" localgovdrupal/localgov_geo:"dev-feature/drupal-11-support as 2.0.9" localgovdrupal/localgov_news:"dev-feature/drupal-11-support as 2.3.10" localgovdrupal/localgov_page_components:"dev-feature/1.x/drupal-11-support as 1.1.7" localgovdrupal/localgov_paragraphs:"dev-feature/2.x/drupal-11-support as 2.4.11" localgovdrupal/localgov_subsites:"dev-feature/2.x/drupal-11-support as 2.3.7" drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer install --working-dir=./html
 
       # Split project creation to make debugging easier for now
@@ -107,7 +106,7 @@ jobs:
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
           composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13" localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11" localgovdrupal/localgov_geo:"dev-feature/drupal-11-support as 2.0.9" localgovdrupal/localgov_news:"dev-feature/drupal-11-support as 2.3.10" localgovdrupal/localgov_page_components:"dev-feature/1.x/drupal-11-support as 1.1.7" localgovdrupal/localgov_paragraphs:"dev-feature/2.x/drupal-11-support as 2.4.11" localgovdrupal/localgov_subsites:"dev-feature/2.x/drupal-11-support as 2.3.7"
-          composer require --working-dir=./html --no-install --with-all-dependencies brianium/paratest:^7.3.1 drupal/core:${{ matrix.drupal-version }} drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
+          composer require --working-dir=./html --no-install --with-all-dependencies drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer install --working-dir=./html
           
       - name: Obtain the test target using Composer
