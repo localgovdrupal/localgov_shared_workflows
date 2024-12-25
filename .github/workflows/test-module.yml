@@ -121,7 +121,7 @@ jobs:
         with:
           path: ${{inputs.project_path}}
 
-      # commented out as this breaks D11 installs as because suggest doesn't have a version it fails
+      # commented out as this breaks D11 installs because suggest doesn't have a version so it falls back to stable versions and fails
       # - name: Obtain suggested dependencies
       #   run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
