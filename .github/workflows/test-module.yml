@@ -79,7 +79,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ./html
-          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}
+          key: localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-${{ github.run_id }}-${{ secrets.CACHE_VERSION }}-test
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
