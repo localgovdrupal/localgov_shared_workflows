@@ -112,7 +112,6 @@ jobs:
     name: ESLint javascript checks
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -148,7 +147,6 @@ jobs:
     name: ESLint yaml checks
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -170,11 +168,13 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Install packages
+        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
 
       - name: Run coding standards checks
+        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           cp -f .prettierrc.json ../.prettierrc.json
@@ -184,7 +184,6 @@ jobs:
     name: Stylelint checks
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -206,11 +205,13 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Install packages
+        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
 
       - name: Run coding standards checks
+        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           cp -f .prettierrc.json ../.prettierrc.json
