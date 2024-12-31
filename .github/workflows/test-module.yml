@@ -112,6 +112,7 @@ jobs:
     name: ESLint javascript checks
     needs: build
     runs-on: ubuntu-latest
+    if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -133,21 +134,21 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Install packages
-        if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
 
       - name: Run coding standards checks
-        if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/eslint/bin/eslint.js --ext .js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   eslint_yaml:
     name: ESLint yaml checks
     needs: build
     runs-on: ubuntu-latest
+    if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -169,21 +170,21 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Install packages
-        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
 
       - name: Run coding standards checks
-        if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   stylelint:
     name: Stylelint checks
     needs: build
     runs-on: ubuntu-latest
+    if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
 
     strategy:
       fail-fast: false
@@ -205,15 +206,14 @@ jobs:
             localgov-build-${{ matrix.localgov-version }}-${{ matrix.drupal-version }}-${{ matrix.php-version }}-
 
       - name: Install packages
-        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
           npm i
 
       - name: Run coding standards checks
-        if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json "../../${{inputs.project_path}}/**/*.css"
 
   phpcs:
