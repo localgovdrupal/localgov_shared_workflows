@@ -318,6 +318,8 @@ jobs:
     name: PHPUnit tests
     needs: [build,phpcs,phpstan]
     runs-on: ubuntu-latest
+    env:
+      PHPUNIT_CONFIG_PATH: "./phpunit.xml.dist"
 
     strategy:
       fail-fast: false
@@ -360,9 +362,13 @@ jobs:
       - name: Start Docker environment
         run: docker compose -f docker-compose.yml up -d
 
+      - name: Override phpunit config path if D11
+        if: matrix.drupal-version == '~11.0' 
+        run: echo "PHPUNIT_CONFIG_PATH=\"./phpunit.d11.xml.dist\"" >> $GITHUB_ENV
+
       - name: Run PHPUnit tests
         run: |
           mkdir -p ./html/web/sites/simpletest && chmod 777 ./html/web/sites/simpletest
           sed -i "s#http://localgov.lndo.site#http://drupal#" ./html/phpunit.xml.dist
           docker exec -t drupal bash -c 'chown docker:docker -R /var/www/html'
-          docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit /var/www/html/${{inputs.project_path}}"
+          docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit -c ${{ env.PHPUNIT_CONFIG_PATH }} /var/www/html/${{inputs.project_path}}"
