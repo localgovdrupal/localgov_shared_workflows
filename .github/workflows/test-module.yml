@@ -165,6 +165,7 @@ jobs:
         if: ${{ hashFiles(format('./html/{0}/**/*.js', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/eslint/bin/eslint.js --ext .js --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   eslint_yaml:
@@ -201,6 +202,7 @@ jobs:
         if: ${{ hashFiles(format('./html/{0}/**/*.yml', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/eslint/bin/eslint.js --ext .yml --resolve-plugins-relative-to=./web/core ../../${{inputs.project_path}}
 
   stylelint:
@@ -237,6 +239,7 @@ jobs:
         if: ${{ hashFiles(format('./html/{0}/**/*.css', inputs.project_path)) != '' }}
         run: |
           cd html/web/core
+          cp -f .prettierrc.json ../.prettierrc.json
           node ./node_modules/.bin/stylelint --ignore-path .stylelintignore --config .stylelintrc.json "../../${{inputs.project_path}}/**/*.css"
 
   phpcs:
