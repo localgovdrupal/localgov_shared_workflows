@@ -123,10 +123,10 @@ jobs:
         with:
           path: ${{inputs.project_path}}
 
-      # Only run for D10 as this breaks D11 installs because suggest doesn't have a version 
+      # Allow continue on error as breaks D11 installs because suggest doesn't have a version 
       # so it falls back to stable versions. which do not have D11 releases so fails
       - name: Obtain suggested dependencies
-        if: matrix.drupal-version == '~10.0'
+        continue-on-error: true
         run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
       - name: Obtain dev dependencies
