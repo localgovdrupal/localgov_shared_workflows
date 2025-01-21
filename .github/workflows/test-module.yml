@@ -125,10 +125,9 @@ jobs:
 
       # Only run for D10 as this breaks D11 installs because suggest doesn't have a version 
       # so it falls back to stable versions. which do not have D11 releases so fails
-      # commented out for now as this breaks D10 and D11 due to the custom project branch
-      # - name: Obtain suggested dependencies
-      #   if: matrix.drupal-version == '~10.0'
-      #   run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
+      - name: Obtain suggested dependencies
+        if: matrix.drupal-version == '~10.0'
+        run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
       - name: Obtain dev dependencies
         if: hashFiles('./html/${{inputs.project_path}}/composer.json') != ''
