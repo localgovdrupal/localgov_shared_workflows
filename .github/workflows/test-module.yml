@@ -25,14 +25,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        localgov-version:
-          - '3.x'
-        drupal-version:
-          - '~10.0'
-        php-version:
-          - '8.1'
-          - '8.2'
-          - '8.3'
+        include:
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.1'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.2'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.3'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.4'
+          - localgov-version: '3.x'
+            drupal-version: '~11.0'
+            php-version: '8.3'
+          - localgov-version: '3.x'
+            drupal-version: '~11.0'
+            php-version: '8.4'
 
     steps:
       - name: Save git branch and git repo names to env if this is not a pull request
@@ -81,13 +92,25 @@ jobs:
           repository: localgovdrupal/drupal-container
           ref: php${{ matrix.php-version }}
 
-      - name: Create LocalGov Drupal project
+      # Split project creation to make debugging easier for now
+      - name: Create LocalGov Drupal 10 project
+        if: matrix.drupal-version == '~10.0'
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "${{ matrix.localgov-version }}"
           composer --working-dir=./html require --no-install localgovdrupal/localgov:${{ matrix.localgov-version }}-dev
           composer --working-dir=./html require --no-install drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer --working-dir=./html install
 
+      # Split project creation to make debugging easier for now
+      - name: Create LocalGov Drupal 11 project
+        if: matrix.drupal-version == '~11.0' 
+        run: |
+          composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
+          composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13" localgovdrupal/localgov_core:"dev-fix/2.x/246-drupal-11-support as 2.13.11" localgovdrupal/localgov_demo:"dev-feature/drupal-11-support as 3.0.1" localgovdrupal/localgov_directories:"dev-feature/3.x/394-drupal-11-support as 3.2.2" localgovdrupal/localgov_events:"dev-feature/drupal-11-support as 3.0.3" localgovdrupal/localgov_guides:"dev-feature/2.x/drupal-11-support as 2.1.13" localgovdrupal/localgov_news:"dev-feature/drupal-11-support as 2.3.10" localgovdrupal/localgov_page_components:"dev-feature/1.x/drupal-11-support as 1.1.7" localgovdrupal/localgov_paragraphs:"dev-feature/2.x/drupal-11-support as 2.4.11" localgovdrupal/localgov_services:"dev-feature/2.x/drupal-11-support as 2.1.15" localgovdrupal/localgov_step_by_step:"dev-feature/2.x/drupal-11-support as 2.1.8" localgovdrupal/localgov_subsites:"dev-feature/2.x/drupal-11-support as 2.3.7" localgovdrupal/localgov_workflows:"dev-feature/1.x/drupal-11-support as 1.3.8"
+          composer require --working-dir=./html --no-install --with-all-dependencies "drupal/image_widget_crop": "2.x-dev#2f10025d2119422e8b33f2bcb24068704d88bbf5 as 2.4.0"
+          composer require --working-dir=./html --no-install --with-all-dependencies drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
+          composer install --working-dir=./html
+          
       - name: Obtain the test target using Composer
         if: env.HEAD_USER == 'localgovdrupal'
         run: |
@@ -101,7 +124,10 @@ jobs:
         with:
           path: ${{inputs.project_path}}
 
+      # Allow continue on error as breaks D11 installs because suggest doesn't have a version 
+      # so it falls back to stable versions, which do not have D11 releases so fails
       - name: Obtain suggested dependencies
+        continue-on-error: true
         run: composer --working-dir=./html/${{inputs.project_path}} suggests --list | xargs composer --working-dir=./html require
 
       - name: Obtain dev dependencies
@@ -121,7 +147,7 @@ jobs:
         drupal-version:
           - '~10.0'
         php-version:
-          - '8.3'
+          - '8.4'
 
     steps:
       - name: Cached workspace
@@ -158,7 +184,7 @@ jobs:
         drupal-version:
           - '~10.0'
         php-version:
-          - '8.3'
+          - '8.4'
 
     steps:
       - name: Cached workspace
@@ -195,7 +221,7 @@ jobs:
         drupal-version:
           - '~10.0'
         php-version:
-          - '8.3'
+          - '8.4'
 
     steps:
       - name: Cached workspace
@@ -232,7 +258,7 @@ jobs:
         drupal-version:
           - '~10.0'
         php-version:
-          - '8.3'
+          - '8.4'
 
     steps:
       - name: Cached workspace
@@ -268,7 +294,7 @@ jobs:
         drupal-version:
           - '~10.0'
         php-version:
-          - '8.3'
+          - '8.4'
 
     steps:
       - name: Cached workspace
@@ -302,14 +328,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        localgov-version:
-          - '3.x'
-        drupal-version:
-          - '~10.0'
-        php-version:
-          - '8.1'
-          - '8.2'
-          - '8.3'
+        include:
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.1'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.2'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.3'
+          - localgov-version: '3.x'
+            drupal-version: '~10.0'
+            php-version: '8.4'
+          - localgov-version: '3.x'
+            drupal-version: '~11.0'
+            php-version: '8.3'
+          - localgov-version: '3.x'
+            drupal-version: '~11.0'
+            php-version: '8.4'
 
     steps:
       - name: Clone Drupal container
@@ -329,9 +366,18 @@ jobs:
       - name: Start Docker environment
         run: docker compose -f docker-compose.yml up -d
 
-      - name: Run PHPUnit tests
+      - name: Run PHPUnit tests for D10
+        if: matrix.drupal-version == '~10.0' 
         run: |
           mkdir -p ./html/web/sites/simpletest && chmod 777 ./html/web/sites/simpletest
           sed -i "s#http://localgov.lndo.site#http://drupal#" ./html/phpunit.xml.dist
           docker exec -t drupal bash -c 'chown docker:docker -R /var/www/html'
           docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit /var/www/html/${{inputs.project_path}}"
+
+      - name: Run PHPUnit tests for D11
+        if: matrix.drupal-version == '~11.0'
+        run: |
+          mkdir -p ./html/web/sites/simpletest && chmod 777 ./html/web/sites/simpletest
+          sed -i "s#http://localgov.lndo.site#http://drupal#" ./html/phpunit.xml.dist
+          docker exec -t drupal bash -c 'chown docker:docker -R /var/www/html'
+          docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit -c ./phpunit.d11.xml.dist /var/www/html/${{inputs.project_path}}"
