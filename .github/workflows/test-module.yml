@@ -322,7 +322,7 @@ jobs:
   
   phpunit:
     name: PHPUnit tests
-    needs: [build,phpcs,phpstan]
+    # needs: [build,phpcs,phpstan]
     runs-on: ubuntu-latest
 
     strategy:
