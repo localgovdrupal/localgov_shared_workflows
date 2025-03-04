@@ -107,7 +107,6 @@ jobs:
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html dev-feature/drupal-11-support
           composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:"dev-feature/3.x/d11-support as 3.0.13"
-          composer require --working-dir=./html --no-install --with-all-dependencies "drupal/image_widget_crop": "2.x-dev#2f10025d2119422e8b33f2bcb24068704d88bbf5 as 2.4.0"
           composer require --working-dir=./html --no-install --with-all-dependencies drupal/core-recommended:${{ matrix.drupal-version }} drupal/core-composer-scaffold:${{ matrix.drupal-version }} drupal/core-project-message:${{ matrix.drupal-version }} drupal/core-dev:${{ matrix.drupal-version }}
           composer install --working-dir=./html
           
