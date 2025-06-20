@@ -103,7 +103,7 @@ jobs:
 
       # Split project creation to make debugging easier for now
       - name: Create LocalGov Drupal 11 project
-        if: matrix.drupal-version == '~11.0' 
+        if: matrix.drupal-version == '~11.1.0' 
         run: |
           composer create-project --stability dev --no-install localgovdrupal/localgov-project ./html "3.2.x"
           composer require --working-dir=./html --no-install --with-all-dependencies localgovdrupal/localgov:3.2.x-dev
