@@ -39,10 +39,10 @@ jobs:
             drupal-version: '~10.0'
             php-version: '8.4'
           - localgov-version: '3.x'
-            drupal-version: '~11.0'
+            drupal-version: '~11.1.0'
             php-version: '8.3'
           - localgov-version: '3.x'
-            drupal-version: '~11.0'
+            drupal-version: '~11.1.0'
             php-version: '8.4'
 
     steps:
@@ -255,7 +255,7 @@ jobs:
         localgov-version:
           - '3.x'
         drupal-version:
-          - '~11.0'
+          - '~11.1.0'
         php-version:
           - '8.4'
 
@@ -291,7 +291,7 @@ jobs:
         localgov-version:
           - '3.x'
         drupal-version:
-          - '~11.0'
+          - '~11.1.0'
         php-version:
           - '8.4'
 
@@ -341,10 +341,10 @@ jobs:
             drupal-version: '~10.0'
             php-version: '8.4'
           - localgov-version: '3.x'
-            drupal-version: '~11.0'
+            drupal-version: '~11.1.0'
             php-version: '8.3'
           - localgov-version: '3.x'
-            drupal-version: '~11.0'
+            drupal-version: '~11.1.0'
             php-version: '8.4'
 
     steps:
@@ -374,7 +374,7 @@ jobs:
           docker exec -u docker -t drupal bash -c "cd /var/www/html && ./bin/phpunit /var/www/html/${{inputs.project_path}}"
 
       - name: Run PHPUnit tests for D11
-        if: matrix.drupal-version == '~11.0'
+        if: matrix.drupal-version == '~11.1.0'
         run: |
           mkdir -p ./html/web/sites/simpletest && chmod 777 ./html/web/sites/simpletest
           sed -i "s#http://localgov.lndo.site#http://drupal#" ./html/phpunit.xml.dist
