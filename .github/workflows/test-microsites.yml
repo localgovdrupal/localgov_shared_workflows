@@ -28,10 +28,11 @@ jobs:
         localgov-version:
           - '4.x'
         drupal-version:
-          - '~11.0'
+          - '~10.0'
         php-version:
+          - '8.1'
+          - '8.2'
           - '8.3'
-          - '8.4'
 
     steps:
       - name: Save git branch and git repo names to env if this is not a pull request
@@ -118,9 +119,9 @@ jobs:
         localgov-version:
           - '4.x'
         drupal-version:
-          - '~11.0'
+          - '~10.0'
         php-version:
-          - '8.4'
+          - '8.3'
 
     steps:
       - name: Cached workspace
@@ -154,9 +155,9 @@ jobs:
         localgov-version:
           - '4.x'
         drupal-version:
-          - '~11.0'
+          - '~10.0'
         php-version:
-          - '8.4'
+          - '8.3'
 
     steps:
       - name: Cached workspace
@@ -192,10 +193,11 @@ jobs:
         localgov-version:
           - '4.x'
         drupal-version:
-          - '~11.0'
+          - '~10.0'
         php-version:
+          - '8.1'
+          - '8.2'
           - '8.3'
-          - '8.4'
 
     steps:
       - name: Clone Drupal container
