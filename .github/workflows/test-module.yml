@@ -103,12 +103,12 @@ jobs:
           composer --working-dir=./html install
 
       - name: Obtain the test target using Composer
-        if: env.HEAD_USER == 'localgovdrupal'
+        if: env.HEAD_USER == 'localgovdrupal' && ${{ inputs.project }} != 'localgovdrupal/localgov'
         run: |
-          composer --working-dir=./html require --with-all-dependencies ${{inputs.project}}:"${COMPOSER_REF} as ${LATEST_RELEASE}"
+          composer --working-dir=./html require --with-all-dependencies ${{ inputs.project }}:"${COMPOSER_REF} as ${LATEST_RELEASE}"
 
       - name: Obtain the test target using Git
-        if: env.HEAD_USER != 'localgovdrupal'
+        if: env.HEAD_USER != 'localgovdrupal' && ${{ inputs.project }} != 'localgovdrupal/localgov'
         uses: actions/checkout@v4
         with:
           path: ${{inputs.project_path}}
