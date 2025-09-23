@@ -21,9 +21,9 @@ jobs:
   build:
     name: Install LocalGov Drupal
     runs-on: ubuntu-latest
-    
-  env:
-    COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    env:
+      COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     strategy:
       fail-fast: false
