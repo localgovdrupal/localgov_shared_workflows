@@ -76,7 +76,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Clone drupal_container
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: localgovdrupal/drupal-container
           ref: php${{ matrix.php-version }}
@@ -97,7 +97,7 @@ jobs:
 
       - name: Obtain the test target using Git
         if: env.HEAD_USER != 'localgovdrupal'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: ${{inputs.project_path}}
 
@@ -201,7 +201,7 @@ jobs:
 
     steps:
       - name: Clone Drupal container
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: localgovdrupal/drupal-container
           ref: php${{ matrix.php-version }}
